@@ -19,13 +19,13 @@
       <Cursor fx:constant="DEFAULT" />
    </cursor>
    <children>
-      <Slider fx:id="sliderAlpha" blockIncrement="0.25" layoutX="870.0" layoutY="33.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" onRotate="#lol" showTickLabels="true" showTickMarks="true" value="0.5" />
+      <Slider fx:id="sliderAlpha" blockIncrement="0.25" layoutX="870.0" layoutY="33.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="0.5" />
       <Label layoutX="832.0" layoutY="33.0" text="alpha" />
-      <Slider fx:id="sliderBetta" layoutX="870.0" layoutY="80.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" onRotate="#lol" showTickLabels="true" showTickMarks="true" value="0.5" />
+      <Slider fx:id="sliderBetta" layoutX="870.0" layoutY="80.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="0.5" />
       <Label layoutX="832.0" layoutY="80.0" text="betta" />
       <Label layoutX="846.0" layoutY="119.0" text="p" />
-      <Slider fx:id="sliderP" layoutX="870.0" layoutY="119.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" onRotate="#lol" showTickLabels="true" value="0.5" />
-      <Button fx:id="mainButton" layoutX="836.0" layoutY="492.0" mnemonicParsing="false" onAction="#lol" prefHeight="94.0" prefWidth="170.0" text="Start">
+      <Slider fx:id="sliderP" layoutX="870.0" layoutY="119.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" showTickLabels="true" value="0.5" />
+      <Button fx:id="mainButton" layoutX="836.0" layoutY="492.0" mnemonicParsing="false" prefHeight="94.0" prefWidth="170.0" text="Start">
          <font>
             <Font size="37.0" />
          </font>

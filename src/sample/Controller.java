@@ -29,25 +29,19 @@ public class Controller implements Initializable {
     Slider sliderN;
     @FXML
     Pane pane;
-    @FXML
-    TextField txt;
-    @FXML
-    void lol(){
-        mainButton.setText(txt.getText());
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         sliderN.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                mainButton.setText(Integer.toString((int)sliderN.getValue()));
+                antDraw.changeLineValuesTable((int)sliderN.getValue());
             }
         });
 
         //array of lines initialization
         antDraw.pane = pane;
-        antDraw.generateLineValues();
+        antDraw.generateLineValues((int)sliderN.getValue());
     }
 
 }
