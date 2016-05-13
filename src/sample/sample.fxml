@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+   <children>
+      <Slider fx:id="sliderAlpha" blockIncrement="0.25" layoutX="870.0" layoutY="33.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" onRotate="#lol" showTickLabels="true" showTickMarks="true" value="0.5" />
+      <Label layoutX="832.0" layoutY="33.0" text="alpha" />
+      <Slider fx:id="sliderBetta" layoutX="870.0" layoutY="80.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" onRotate="#lol" showTickLabels="true" showTickMarks="true" value="0.5" />
+      <Label layoutX="832.0" layoutY="80.0" text="betta" />
+      <Label layoutX="846.0" layoutY="119.0" text="p" />
+      <Slider fx:id="sliderP" layoutX="870.0" layoutY="119.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" onRotate="#lol" showTickLabels="true" value="0.5" />
+      <Button fx:id="mainButton" layoutX="836.0" layoutY="492.0" mnemonicParsing="false" onAction="#lol" prefHeight="94.0" prefWidth="170.0" text="Start">
+         <font>
+            <Font size="37.0" />
+         </font>
+      </Button>
+      <Label layoutX="846.0" layoutY="159.0" text="n" />
+      <Slider fx:id="sliderN" blockIncrement="100.0" layoutX="870.0" layoutY="159.0" majorTickUnit="1.0" max="8.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="4.0" />
+       </children>
+</Pane>
