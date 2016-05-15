@@ -30,6 +30,8 @@ public class Controller implements Initializable {
     @FXML
     Slider sliderSpeed;
     @FXML
+    Slider sliderK;
+    @FXML
     Pane pane;
 
     @Override
@@ -37,16 +39,26 @@ public class Controller implements Initializable {
         sliderN.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                antDraw.changeLineValuesTable((int)sliderN.getValue());
+                antDraw.changeLineValuesTable((int) sliderN.getValue());
                 antDraw.generateVertexes();
                 antDraw.generateEdges();
             }
         });
 
         antDraw.pane = pane;
-        antDraw.generateLineValues((int)sliderN.getValue());
+        antDraw.generateLineValues((int) sliderN.getValue());
         antDraw.generateVertexes();
         antDraw.generateEdges();
     }
 
+    @FXML
+    public void startButton() {
+        //проверка ввода
+        try {
+            antDraw.run(sliderAlpha.getValue(), sliderBetta.getValue(), sliderP.getValue(),
+                    (int) sliderK.getValue(), sliderSpeed);
+        } catch (InterruptedException exc) {
+            System.out.println("lol");
+        }
+    }
 }

@@ -1,11 +1,14 @@
 package antDraw;
 
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+
+import Ant.*;
 
 /**
  * Created by Nikita Gritsay on 13.05.2016.
@@ -15,11 +18,14 @@ public class antDraw {
     public static TextField[][] lineValues;
     public static Circle[] vertexes;
     public static Line[][] edges;
+    public static double[][] pheros;
     public static final int cityMax = 8;
     public static final int mapCentreX = 360;
     public static final int mapCentreY = 300;
     public static final int mapRadius = 250;
     public static final int vertexRadius = 25;
+    public static final int edgesWidh = 20;
+    public static final int pheroStartValue = 10;
     private static int cityX;
     public static int cityCt;
 
@@ -33,7 +39,7 @@ public class antDraw {
                 pane.getChildren().add(lineValues[i][j]);
                 lineValues[i][j].setId(Integer.toString(i) + Integer.toString(j));
                 lineValues[i][j].setLayoutX(716 + j * 38);
-                lineValues[i][j].setLayoutY(248 + i * 26);
+                lineValues[i][j].setLayoutY(270 + i * 26);
                 lineValues[i][j].setPrefWidth(36);
                 lineValues[i][j].setPrefHeight(24);
             }
@@ -74,12 +80,17 @@ public class antDraw {
             vertexes[i].setCenterX(mapCentreX + mapRadius * Math.cos(2 * Math.PI / cityCt * i));
             vertexes[i].setCenterY(mapCentreY + mapRadius * Math.sin(2 * Math.PI / cityCt * i));
             vertexes[i].setRadius(vertexRadius);
-            vertexes[i].setFill(Color.BLUE);
+            vertexes[i].setFill(i != 0 ? Color.BLUE : Color.GOLD);
             pane.getChildren().add(vertexes[i]);
         }
     }
 
     public static void generateEdges(){
+        pheros = new double[cityCt][cityCt];
+        for(int i = 0; i < pheros.length; i++)
+            for(int j = 0; j < pheros[i].length; j++)
+                pheros[i][j] = pheroStartValue;
+
         if(edges != null)
             for(int i = 1; i < edges.length; i++)
                 for(int j = 0; j < edges[i].length; j++)
@@ -90,10 +101,49 @@ public class antDraw {
             for(int j = 0; j < edges[i].length; j++){
                 edges[i][j] = new Line(vertexes[i].getCenterX(), vertexes[i].getCenterY(),
                         vertexes[j].getCenterX(), vertexes[j].getCenterY());
-                edges[i][j].setStrokeWidth(10);
+                edges[i][j].setStrokeWidth(pheroToWidth(pheroStartValue));
+                edges[i][j].setStroke(Color.PURPLE);
                 edges[i][j].setStrokeLineCap(StrokeLineCap.ROUND);
                 pane.getChildren().add(edges[i][j]);
             }
         }
+    }
+
+    //change
+    public static int pheroToWidth(int phero){
+        if(phero > 30)
+            return 30;
+        else
+            return phero;
+    }
+
+    //change
+    public static boolean lineValuesCheck(){
+        return true;
+    }
+
+    public static void run(double alpha, double betta, double p,
+                           int k, Slider speed) throws InterruptedException {
+        int[][] lineValues = new int[cityCt][cityCt];
+        for(int i = 1; i < cityCt; i++)
+            for(int j = 0; j < i; j++)
+                lineValues[i][j] = lineValues[j][j] = Integer.parseInt(
+                        antDraw.lineValues[i][j + cityX].getText());
+
+        int[] cityXCoords = new int[cityCt];
+        for(int i = 0; i < cityCt; i++)
+            cityXCoords[i] = (int)vertexes[i].getCenterX();
+
+        int[] cityYCoords = new int[cityCt];
+        for(int i = 0; i < cityCt; i++)
+            cityYCoords[i] = (int)vertexes[i].getCenterY();
+
+        Ant ant = new Ant(pane, pheros, lineValues, cityCt, alpha,
+                betta, p, k, cityXCoords, cityYCoords);
+
+        do{
+            ant.round();
+            Thread.sleep(1000 - (int)speed.getValue());
+        }while(!ant.isFinished);
     }
 }

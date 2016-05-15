@@ -1,7 +1,7 @@
 package Ant;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Material;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
@@ -12,14 +12,17 @@ import java.util.ArrayList;
 public class Ant {
     private Pane pane;
     private Circle shape; //фигура муравья
-    private double[][] phero;  //матрица феромонов
+    private double[][] pheros;  //матрица феромонов
     private int [][] lineValues;  //матрица расстояний до городов
     private int cityCt;  //кол-во городов
     private ArrayList<Integer> history;  //пройденные муравьем города
     private ArrayList<Integer> whiteList;  //доступные города
     private double alpha;
     private double betta;
+    private double p;
+    private int k;
     private int lenLeft;  //оставшийся путь до города
+    private int lenTotal;
     private int[] cityXCoords;  //координаты Х городов
     private int[] cityYCoords;  //координаты У городов
     public boolean isFinished;
@@ -27,8 +30,8 @@ public class Ant {
     private int currentCity;
     private int prevCity;
 
-    public Ant(Pane pane, double[][] phero, int[][] lineValues, int cityCt, double alpha,
-               double betta, int[] cityXCoords, int[] cityYCoords){
+    public Ant(Pane pane, double[][] pheros, int[][] lineValues, int cityCt, double alpha,
+               double betta,double p, int k, int[] cityXCoords, int[] cityYCoords){
         this.pane = pane;
         this.lineValues = lineValues;
         this.cityCt = cityCt;
@@ -39,26 +42,31 @@ public class Ant {
             whiteList.add(i + 1);
         this.alpha = alpha;
         this.betta = betta;
+        this.p = p;
+        this.k = k;
         this.cityXCoords = cityXCoords;
         this.cityYCoords = cityYCoords;
         this.lenLeft = 0;
         this.isFinished = false;
-        this.phero = phero;
+        this.pheros = pheros;
         this.inCity = true;
         this.currentCity = 0;
         //add shape initialize
+        shape = new Circle(cityXCoords[0], cityYCoords[0],
+                10, Color.BLACK);
+        pane.getChildren().add(shape);
     }
 
     private double procDenominator(){
         double denominator = 0;
         for(int i = 0; i < whiteList.size(); i++)
-            denominator += Math.pow(phero[currentCity][whiteList.get(i)], alpha) *
+            denominator += Math.pow(pheros[currentCity][whiteList.get(i)], alpha) *
                     Math.pow((1/lineValues[currentCity][whiteList.get(i)]), betta);
         return  denominator;
     }
 
     private double procProbability(int cityId, double denominator){
-        return Math.pow(phero[currentCity][cityId], alpha) *
+        return Math.pow(pheros[currentCity][cityId], alpha) *
                 Math.pow((1/lineValues[currentCity][cityId]), betta) / denominator;
     }
 
@@ -100,20 +108,46 @@ public class Ant {
     }
 
     private void move(){
+        lenLeft--;
+        if(lenLeft == 0) {
+            inCity = true;
+            shape.setCenterX(cityXCoords[currentCity]);
+            shape.setCenterY(cityYCoords[currentCity]);
+        }
+        else{
+            shape.setCenterX(cityXCoords[prevCity] + (lenTotal - lenLeft) / lenTotal *
+                    (cityXCoords[currentCity] - cityXCoords[prevCity]));
+            shape.setCenterY(cityYCoords[prevCity] + (lenTotal - lenLeft) / lenTotal *
+                    (cityYCoords[currentCity] - cityYCoords[prevCity]));
+        }
+    }
 
+    private void pherosUpdate(){
+        int allDistance = 0;
+        for(int i = 0; i < history.size() - 1; i++)
+            allDistance += lineValues[history.get(i)][history.get(i+1)];
+
+        for(int i = 0; i < pheros.length; i++)
+            for(int j = 0; j < pheros.length; j++)
+                pheros[i][j] *= 1 - p;
+
+        for(int i = 0; i < history.size() - 1; i++){
+            int city1 = history.get(i), city2 = history.get(i + 1);
+            pheros[city1][city2] = pheros[city2][city1] += k / allDistance;
+        }
     }
 
     public void round() {
         if (inCity)
             if (currentCity == 0 && history.size() == cityCt + 1) {
-                //обновить феромоны
+                pherosUpdate();
                 isFinished = true;
+                pane.getChildren().remove(shape);
             }
             else{
                 toNextCity();
             }
         else
             move();
-
     }
 }
