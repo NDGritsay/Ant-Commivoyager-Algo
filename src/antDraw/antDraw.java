@@ -7,14 +7,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 /**
  * Created by Nikita Gritsay on 13.05.2016.
  */
 public class antDraw {
-    public static TextField[][] lineValues;
     public static Pane pane;
+    public static TextField[][] lineValues;
+    public static Circle[] vertexes;
     public static final int cityMax = 8;
+    public static final int mapCentreX = 360;
+    public static final int mapCentreY = 300;
+    public static final int mapRadius = 250;
+    public static final int vertexRadius = 25;
     private static int cityX;
     public static int cityCt;
 
@@ -28,7 +35,7 @@ public class antDraw {
                 pane.getChildren().add(lineValues[i][j]);
                 lineValues[i][j].setId(Integer.toString(i) + Integer.toString(j));
                 lineValues[i][j].setLayoutX(716 + j * 38);
-                lineValues[i][j].setLayoutY(222 + i * 26);
+                lineValues[i][j].setLayoutY(248 + i * 26);
                 lineValues[i][j].setPrefWidth(36);
                 lineValues[i][j].setPrefHeight(24);
             }
@@ -57,5 +64,20 @@ public class antDraw {
         for(int i = 1; i < cityCt; i++)
             for(int j = 0; j < i; j++)
                 lineValues[j][cityX+i].setText(/*lineValues[i][cityX+j].getText()*/"");
+    }
+
+    public static void generateVertexes(){
+        if(vertexes != null)
+            for(int i = 0; i < vertexes.length; i++)
+                pane.getChildren().remove(vertexes[i]);
+        vertexes = new Circle[cityCt];
+        for(int i = 0; i < cityCt; i++){
+            vertexes[i] = new Circle();
+            vertexes[i].setCenterX(mapCentreX + mapRadius * Math.cos(2 * Math.PI / cityCt * i));
+            vertexes[i].setCenterY(mapCentreY + mapRadius * Math.sin(2 * Math.PI / cityCt * i));
+            vertexes[i].setRadius(25);
+            vertexes[i].setFill(Color.BLUE);
+            pane.getChildren().add(vertexes[i]);
+        }
     }
 }

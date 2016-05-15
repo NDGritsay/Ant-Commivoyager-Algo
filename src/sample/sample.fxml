@@ -30,7 +30,9 @@
             <Font size="37.0" />
          </font>
       </Button>
-      <Label layoutX="846.0" layoutY="159.0" text="n" />
-      <Slider fx:id="sliderN" blockIncrement="100.0" layoutX="870.0" layoutY="159.0" majorTickUnit="1.0" max="8.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="4.0" />
+      <Label layoutX="846.0" layoutY="195.0" text="n" />
+      <Slider fx:id="sliderN" blockIncrement="100.0" layoutX="870.0" layoutY="195.0" majorTickUnit="1.0" max="8.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="4.0" />
+      <Slider fx:id="sliderSpeed" blockIncrement="100.0" layoutX="869.0" layoutY="158.0" majorTickUnit="110.0" max="1000.0" min="10.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="100.0" />
+      <Label layoutX="833.0" layoutY="158.0" text="speed" />
        </children>
 </Pane>

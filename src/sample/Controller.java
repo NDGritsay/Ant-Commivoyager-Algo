@@ -28,6 +28,8 @@ public class Controller implements Initializable {
     @FXML
     Slider sliderN;
     @FXML
+    Slider sliderSpeed;
+    @FXML
     Pane pane;
 
     @Override
@@ -36,6 +38,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 antDraw.changeLineValuesTable((int)sliderN.getValue());
+                antDraw.generateVertexes();
             }
         });
 
