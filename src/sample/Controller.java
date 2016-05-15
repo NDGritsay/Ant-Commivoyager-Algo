@@ -39,12 +39,14 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 antDraw.changeLineValuesTable((int)sliderN.getValue());
                 antDraw.generateVertexes();
+                antDraw.generateEdges();
             }
         });
 
-        //array of lines initialization
         antDraw.pane = pane;
         antDraw.generateLineValues((int)sliderN.getValue());
+        antDraw.generateVertexes();
+        antDraw.generateEdges();
     }
 
 }

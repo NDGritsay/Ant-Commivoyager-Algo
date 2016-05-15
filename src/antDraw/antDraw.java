@@ -1,14 +1,11 @@
 package antDraw;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 
 /**
  * Created by Nikita Gritsay on 13.05.2016.
@@ -17,6 +14,7 @@ public class antDraw {
     public static Pane pane;
     public static TextField[][] lineValues;
     public static Circle[] vertexes;
+    public static Line[][] edges;
     public static final int cityMax = 8;
     public static final int mapCentreX = 360;
     public static final int mapCentreY = 300;
@@ -75,9 +73,27 @@ public class antDraw {
             vertexes[i] = new Circle();
             vertexes[i].setCenterX(mapCentreX + mapRadius * Math.cos(2 * Math.PI / cityCt * i));
             vertexes[i].setCenterY(mapCentreY + mapRadius * Math.sin(2 * Math.PI / cityCt * i));
-            vertexes[i].setRadius(25);
+            vertexes[i].setRadius(vertexRadius);
             vertexes[i].setFill(Color.BLUE);
             pane.getChildren().add(vertexes[i]);
+        }
+    }
+
+    public static void generateEdges(){
+        if(edges != null)
+            for(int i = 1; i < edges.length; i++)
+                for(int j = 0; j < edges[i].length; j++)
+                    pane.getChildren().remove(edges[i][j]);
+        edges = new Line[cityCt][];
+        for(int i = 1; i < cityCt; i++){
+            edges[i] = new Line[i];
+            for(int j = 0; j < edges[i].length; j++){
+                edges[i][j] = new Line(vertexes[i].getCenterX(), vertexes[i].getCenterY(),
+                        vertexes[j].getCenterX(), vertexes[j].getCenterY());
+                edges[i][j].setStrokeWidth(10);
+                edges[i][j].setStrokeLineCap(StrokeLineCap.ROUND);
+                pane.getChildren().add(edges[i][j]);
+            }
         }
     }
 }
