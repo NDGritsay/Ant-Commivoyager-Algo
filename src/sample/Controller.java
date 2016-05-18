@@ -54,11 +54,9 @@ public class Controller implements Initializable {
     @FXML
     public void startButton() {
         //проверка ввода
-        try {
-            antDraw.run(sliderAlpha.getValue(), sliderBetta.getValue(), sliderP.getValue(),
-                    (int) sliderK.getValue(), sliderSpeed);
-        } catch (InterruptedException exc) {
-            System.out.println("lol");
-        }
+        antDraw.setConstants(sliderAlpha.getValue(), sliderBetta.getValue(), sliderP.getValue(),
+                (int)sliderK.getValue(), (int)sliderSpeed.getValue());
+        antDraw antThread = new antDraw();
+        antThread.start();
     }
 }

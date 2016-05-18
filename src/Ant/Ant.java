@@ -31,12 +31,11 @@ public class Ant {
     private int prevCity;
 
     public Ant(Pane pane, double[][] pheros, int[][] lineValues, int cityCt, double alpha,
-               double betta,double p, int k, int[] cityXCoords, int[] cityYCoords){
+               double betta,double p, int k, int[] cityXCoords, int[] cityYCoords, Circle shape){
         this.pane = pane;
         this.lineValues = lineValues;
         this.cityCt = cityCt;
         this.history = new ArrayList<>(cityCt + 1);
-        this.history.add(0);
         this.whiteList = new ArrayList<>(cityCt - 1);
         for(int i = 0; i < cityCt - 1; i++)
             whiteList.add(i + 1);
@@ -52,22 +51,23 @@ public class Ant {
         this.inCity = true;
         this.currentCity = 0;
         //add shape initialize
-        shape = new Circle(cityXCoords[0], cityYCoords[0],
+        this.shape = shape;
+        /*shape = new Circle(cityXCoords[0], cityYCoords[0],
                 10, Color.BLACK);
-        pane.getChildren().add(shape);
+        pane.getChildren().add(shape);*/
     }
 
     private double procDenominator(){
         double denominator = 0;
         for(int i = 0; i < whiteList.size(); i++)
             denominator += Math.pow(pheros[currentCity][whiteList.get(i)], alpha) *
-                    Math.pow((1/lineValues[currentCity][whiteList.get(i)]), betta);
+                    Math.pow((1/(double)lineValues[currentCity][whiteList.get(i)]), betta);
         return  denominator;
     }
 
     private double procProbability(int cityId, double denominator){
         return Math.pow(pheros[currentCity][cityId], alpha) *
-                Math.pow((1/lineValues[currentCity][cityId]), betta) / denominator;
+                Math.pow((1/(double)lineValues[currentCity][cityId]), betta) / denominator;
     }
 
     private int getRandomId(double probabilities[]){
@@ -77,9 +77,9 @@ public class Ant {
         for(int i = 1; i < probabilities.length; i++)
             marks[i] = marks[i-1] + probabilities[i];
         double randomMark = Math.random() * marks[marks.length - 1]; //последний элемент marks == сумме всех вероятностей
-        for(int i = 0; i < marks.length; i++)
-            if(randomMark <= marks[i])
-                cityId = i;
+        do{
+            cityId++;
+        }while(randomMark > marks[cityId]);
         return cityId;
     }
 
@@ -103,21 +103,28 @@ public class Ant {
         else
             currentCity = 0;
 
-        lenLeft = lineValues[prevCity][currentCity];
+        lenTotal = lenLeft = lineValues[prevCity][currentCity];
         inCity = false;
+
+        System.out.println("round: " + prevCity + " - " + currentCity);
+        System.out.print("history: ");
+        for(int i = 0; i < history.size(); i++)
+            System.out.print(" " + history.get(i));
     }
 
     private void move(){
         lenLeft--;
+            if(lenLeft % 10 == 0)
+        System.out.println("len left: " + lenLeft);
         if(lenLeft == 0) {
             inCity = true;
             shape.setCenterX(cityXCoords[currentCity]);
             shape.setCenterY(cityYCoords[currentCity]);
         }
         else{
-            shape.setCenterX(cityXCoords[prevCity] + (lenTotal - lenLeft) / lenTotal *
+            shape.setCenterX(cityXCoords[prevCity] + (lenTotal - lenLeft) / (double)lenTotal *
                     (cityXCoords[currentCity] - cityXCoords[prevCity]));
-            shape.setCenterY(cityYCoords[prevCity] + (lenTotal - lenLeft) / lenTotal *
+            shape.setCenterY(cityYCoords[prevCity] + (lenTotal - lenLeft) / (double)lenTotal *
                     (cityYCoords[currentCity] - cityYCoords[prevCity]));
         }
     }
@@ -133,19 +140,19 @@ public class Ant {
 
         for(int i = 0; i < history.size() - 1; i++){
             int city1 = history.get(i), city2 = history.get(i + 1);
-            pheros[city1][city2] = pheros[city2][city1] += k / allDistance;
+            pheros[city1][city2] = pheros[city2][city1] += k / (double)allDistance;
         }
     }
 
     public void round() {
         if (inCity)
-            if (currentCity == 0 && history.size() == cityCt + 1) {
+            if (currentCity == 0 && history.size() > 0) {
                 pherosUpdate();
                 isFinished = true;
-                pane.getChildren().remove(shape);
             }
             else{
                 toNextCity();
+                System.out.println("round");
             }
         else
             move();
