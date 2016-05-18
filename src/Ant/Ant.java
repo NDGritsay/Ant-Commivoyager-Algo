@@ -50,11 +50,7 @@ public class Ant {
         this.pheros = pheros;
         this.inCity = true;
         this.currentCity = 0;
-        //add shape initialize
         this.shape = shape;
-        /*shape = new Circle(cityXCoords[0], cityYCoords[0],
-                10, Color.BLACK);
-        pane.getChildren().add(shape);*/
     }
 
     private double procDenominator(){
@@ -105,17 +101,11 @@ public class Ant {
 
         lenTotal = lenLeft = lineValues[prevCity][currentCity];
         inCity = false;
-
-        System.out.println("round: " + prevCity + " - " + currentCity);
-        System.out.print("history: ");
-        for(int i = 0; i < history.size(); i++)
-            System.out.print(" " + history.get(i));
     }
 
     private void move(){
         lenLeft--;
             if(lenLeft % 10 == 0)
-        System.out.println("len left: " + lenLeft);
         if(lenLeft == 0) {
             inCity = true;
             shape.setCenterX(cityXCoords[currentCity]);
@@ -147,12 +137,12 @@ public class Ant {
     public void round() {
         if (inCity)
             if (currentCity == 0 && history.size() > 0) {
+                history.add(0);
                 pherosUpdate();
                 isFinished = true;
             }
             else{
                 toNextCity();
-                System.out.println("round");
             }
         else
             move();

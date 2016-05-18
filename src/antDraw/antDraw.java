@@ -1,5 +1,6 @@
 package antDraw;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -9,6 +10,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 
 import Ant.*;
+import javafx.scene.text.Font;
 
 /**
  * Created by Nikita Gritsay on 13.05.2016.
@@ -16,6 +18,7 @@ import Ant.*;
 public class antDraw extends Thread{
     public static Pane pane;
     public static TextField[][] lineValues;
+    public static Label[] cityLabels;
     public static Circle[] vertexes;
     public static Line[][] edges;
     public static double[][] pheros;
@@ -25,8 +28,8 @@ public class antDraw extends Thread{
     public static final int MAP_CENTRE_Y = 300;
     public static final int MAP_RADIUS = 250;
     public static final int VERTEX_RADIUS = 25;
-    public static final int EDGES_WIDTH = 10;
-    public static final int PHERO_START_VALUE = 10;
+    public static final int EDGES_WIDTH = 5;
+    public static final double PHERO_START_VALUE = 0.5;
     public static double alpha;
     public static double betta;
     public static double p;
@@ -84,20 +87,29 @@ public class antDraw extends Thread{
         vertexes = new Circle[cityCt];
         for(int i = 0; i < cityCt; i++){
             vertexes[i] = new Circle();
-            vertexes[i].setCenterX(MAP_CENTRE_X + MAP_RADIUS * Math.cos(2 * Math.PI / cityCt * i));
-            vertexes[i].setCenterY(MAP_CENTRE_Y + MAP_RADIUS * Math.sin(2 * Math.PI / cityCt * i));
+            vertexes[i].setCenterX(MAP_CENTRE_X + MAP_RADIUS * Math.cos(2 * i * Math.PI / cityCt));
+            vertexes[i].setCenterY(MAP_CENTRE_Y + MAP_RADIUS * Math.sin(2 * i * Math.PI / cityCt));
             vertexes[i].setRadius(VERTEX_RADIUS);
-            vertexes[i].setFill(i != 0 ? Color.BLUE : Color.GOLD);
+            vertexes[i].setFill(i != 0 ? Color.rgb(0, 47, 90) : Color.GOLD);
             pane.getChildren().add(vertexes[i]);
+        }
+
+        if(cityLabels != null)
+            for(int i = 0; i < cityLabels.length; i++)
+                pane.getChildren().remove(cityLabels[i]);
+        cityLabels = new Label[cityCt];
+        for(int i = 0; i < cityCt; i++){
+            cityLabels[i] = new Label();
+            cityLabels[i].setText(Integer.toString(i + 1));
+            cityLabels[i].setLayoutX(MAP_CENTRE_X + (MAP_RADIUS + 15) * Math.cos(2 * i * Math.PI / cityCt) -7);
+            cityLabels[i].setLayoutY(MAP_CENTRE_Y + (MAP_RADIUS + 15) * Math.sin(2 * i * Math.PI / cityCt) - 15);
+            cityLabels[i].setFont(Font.font(20));
+            cityLabels[i].setTextFill(i != 0 ? Color.DARKGOLDENROD : Color.rgb(0, 47, 90));
+            pane.getChildren().add(cityLabels[i]);
         }
     }
 
     public static void generateEdges(){
-        pheros = new double[cityCt][cityCt];
-        for(int i = 0; i < pheros.length; i++)
-            for(int j = 0; j < pheros[i].length; j++)
-                pheros[i][j] = PHERO_START_VALUE;
-
         if(edges != null)
             for(int i = 1; i < edges.length; i++)
                 for(int j = 0; j < edges[i].length; j++)
@@ -109,11 +121,18 @@ public class antDraw extends Thread{
                 edges[i][j] = new Line(vertexes[i].getCenterX(), vertexes[i].getCenterY(),
                         vertexes[j].getCenterX(), vertexes[j].getCenterY());
                 edges[i][j].setStrokeWidth(EDGES_WIDTH);
-                edges[i][j].setStroke(Color.PURPLE);
+                edges[i][j].setStroke(Color.DARKGOLDENROD);
                 edges[i][j].setStrokeLineCap(StrokeLineCap.ROUND);
                 pane.getChildren().add(edges[i][j]);
             }
         }
+    }
+
+    public static void generatePheros(){
+        pheros = new double[cityCt][cityCt];
+        for(int i = 0; i < pheros.length; i++)
+            for(int j = 0; j < pheros[i].length; j++)
+                pheros[i][j] = PHERO_START_VALUE;
     }
 
     public static void setConstants(double alpha, double betta, double p, int k, int speed){
@@ -123,19 +142,25 @@ public class antDraw extends Thread{
         antDraw.k = k;
         antDraw.speed = speed;
 
-        if(shape != null)
-            pane.getChildren().remove(shape);
         antDraw.shape = new Circle(0, 0,
                 10, Color.BLACK);
         pane.getChildren().add(shape);
     }
 
+    public static void edgesUpdate(){
+        for(int i = 1; i < edges.length ; i++)
+            for(int j = 0; j < edges[i].length; j++)
+                edges[i][j].setOpacity(pheroToCapacity(pheros[i][j]));
+    }
+
     //change
-    public static int pheroToWidth(int phero){
-        if(phero > 30)
-            return 30;
+    public static double pheroToCapacity(double phero){
+        if(phero > 1)
+            phero = 1;
         else
-            return phero;
+            if(phero < 0.05)
+                phero = 0.05;
+        return phero;
     }
 
     //change
@@ -150,14 +175,6 @@ public class antDraw extends Thread{
                 lineValues[i][j] = lineValues[j][i] = Integer.parseInt(
                         antDraw.lineValues[i][j + cityX].getText());
 
-        /*//output linevales
-        for(int i = 0; i < cityCt; i++) {
-            for (int j = 0; j < cityCt; j++)
-                if (i != j)
-                    System.out.println(lineValues[i][j]);
-            System.out.println();
-        }*/
-
         int[] cityXCoords = new int[cityCt];
         for(int i = 0; i < cityCt; i++)
             cityXCoords[i] = (int)vertexes[i].getCenterX();
@@ -169,7 +186,11 @@ public class antDraw extends Thread{
         shape.setCenterX(cityXCoords[0]);
         shape.setCenterY(cityYCoords[0]);
 
+        antDraw.generatePheros();
+
         do {
+            edgesUpdate();
+            antDraw.isFinished = false;
             Ant ant = new Ant(antDraw.pane, pheros, lineValues, cityCt, alpha,
                     betta, p, k, cityXCoords, cityYCoords, shape);
 
@@ -180,7 +201,8 @@ public class antDraw extends Thread{
                 } catch (InterruptedException e) {
                     System.out.println("ops!");
                 }
-            } while (!ant.isFinished);
+            } while (!ant.isFinished && !antDraw.isFinished);
         }while(!antDraw.isFinished);
+
     }
 }

@@ -34,6 +34,8 @@ public class Controller implements Initializable {
     @FXML
     Pane pane;
 
+    private antDraw antThread = new antDraw();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         sliderN.valueProperty().addListener(new ChangeListener<Number>() {
@@ -54,9 +56,29 @@ public class Controller implements Initializable {
     @FXML
     public void startButton() {
         //проверка ввода
-        antDraw.setConstants(sliderAlpha.getValue(), sliderBetta.getValue(), sliderP.getValue(),
-                (int)sliderK.getValue(), (int)sliderSpeed.getValue());
-        antDraw antThread = new antDraw();
-        antThread.start();
+
+        if (!antThread.isAlive()) {
+            sliderAlpha.setDisable(true);
+            sliderBetta.setDisable(true);
+            sliderK.setDisable(true);
+            sliderN.setDisable(true);
+            sliderP.setDisable(true);
+            mainButton.setText("stop");
+
+            antDraw.setConstants(sliderAlpha.getValue(), sliderBetta.getValue(), sliderP.getValue(),
+                    (int) sliderK.getValue(), (int) sliderSpeed.getValue());
+            antThread = new antDraw();
+            antThread.start();
+        } else {
+            sliderAlpha.setDisable(false);
+            sliderBetta.setDisable(false);
+            sliderK.setDisable(false);
+            sliderN.setDisable(false);
+            sliderP.setDisable(false);
+            mainButton.setText("Start");
+
+            antDraw.isFinished = true;
+            pane.getChildren().remove(antDraw.shape);
+        }
     }
 }
