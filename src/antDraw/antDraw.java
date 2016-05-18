@@ -18,6 +18,7 @@ import javafx.scene.text.Font;
 public class antDraw extends Thread{
     public static Pane pane;
     public static TextField[][] lineValues;
+    public static Label[][] lineValuesLabels;
     public static Label[] cityLabels;
     public static Circle[] vertexes;
     public static Line[][] edges;
@@ -75,9 +76,31 @@ public class antDraw extends Thread{
                 lineValues[i][j].setDisable(true);
         for(int i = 0; i < cityCt; i++)
             lineValues[i][cityX + i].setText("");
-        for(int i = 1; i < cityCt; i++)
+        for(int i = 0; i < cityCt; i++)
             for(int j = 0; j < i; j++)
                 lineValues[j][cityX+i].setText(/*lineValues[i][cityX+j].getText()*/"");
+    }
+
+    public static void generateLineValuesLabels(){
+        if(lineValuesLabels != null){
+         for(int i = 0; i < lineValuesLabels[0].length; i++){
+             pane.getChildren().remove(lineValuesLabels[0][i]);
+             pane.getChildren().remove(lineValuesLabels[1][i]);
+         }
+        }
+        lineValuesLabels = new Label[2][cityCt];
+
+        for(int i = 0; i < cityCt; i++){
+            lineValuesLabels[0][i] = new Label(Integer.toString(i + 1));
+            lineValuesLabels[0][i].setLayoutY(250);
+            lineValuesLabels[0][i].setLayoutX(730 + (i + cityX) * 38);
+            pane.getChildren().add(lineValuesLabels[0][i]);
+
+            lineValuesLabels[1][i] = new Label(Integer.toString(i + 1));
+            lineValuesLabels[1][i].setLayoutY(275 + i * 26);
+            lineValuesLabels[1][i].setLayoutX(705 + 38 * cityX);
+            pane.getChildren().add(lineValuesLabels[1][i]);
+        }
     }
 
     public static void generateVertexes(){
@@ -133,6 +156,18 @@ public class antDraw extends Thread{
         for(int i = 0; i < pheros.length; i++)
             for(int j = 0; j < pheros[i].length; j++)
                 pheros[i][j] = PHERO_START_VALUE;
+    }
+
+    public static void startLineValues(){
+        for(int i = 1; i < cityCt; i++)
+            for(int j = 0; j < i; j++)
+                lineValues[i][j + cityX].setDisable(true);
+    }
+
+    public static void stopLineValues(){
+        for(int i = 1; i < cityCt; i++)
+            for(int j = 0; j < i; j++)
+                lineValues[i][j + cityX].setDisable(false);
     }
 
     public static void setConstants(double alpha, double betta, double p, int k, int speed){

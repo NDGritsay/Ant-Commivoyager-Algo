@@ -42,6 +42,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 antDraw.changeLineValuesTable((int) sliderN.getValue());
+                antDraw.generateLineValuesLabels();
                 antDraw.generateVertexes();
                 antDraw.generateEdges();
             }
@@ -49,6 +50,7 @@ public class Controller implements Initializable {
 
         antDraw.pane = pane;
         antDraw.generateLineValues((int) sliderN.getValue());
+        antDraw.generateLineValuesLabels();
         antDraw.generateVertexes();
         antDraw.generateEdges();
     }
@@ -63,7 +65,8 @@ public class Controller implements Initializable {
             sliderK.setDisable(true);
             sliderN.setDisable(true);
             sliderP.setDisable(true);
-            mainButton.setText("stop");
+            antDraw.startLineValues();
+            mainButton.setText("Stop");
 
             antDraw.setConstants(sliderAlpha.getValue(), sliderBetta.getValue(), sliderP.getValue(),
                     (int) sliderK.getValue(), (int) sliderSpeed.getValue());
@@ -75,6 +78,7 @@ public class Controller implements Initializable {
             sliderK.setDisable(false);
             sliderN.setDisable(false);
             sliderP.setDisable(false);
+            antDraw.stopLineValues();
             mainButton.setText("Start");
 
             antDraw.isFinished = true;

@@ -19,9 +19,9 @@
       <Cursor fx:constant="DEFAULT" />
    </cursor>
    <children>
-      <Slider fx:id="sliderAlpha" blockIncrement="0.25" layoutX="870.0" layoutY="14.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="0.5" />
+      <Slider fx:id="sliderAlpha" blockIncrement="0.5" layoutX="870.0" layoutY="14.0" majorTickUnit="0.5" max="4.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="1.0" />
       <Label layoutX="832.0" layoutY="14.0" text="alpha" />
-      <Slider fx:id="sliderBetta" layoutX="870.0" layoutY="61.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="0.5" />
+      <Slider fx:id="sliderBetta" layoutX="870.0" layoutY="61.0" majorTickUnit="0.5" max="4.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="1.0" />
       <Label layoutX="832.0" layoutY="61.0" text="betta" />
       <Label layoutX="849.0" layoutY="98.0" text="p" />
       <Slider fx:id="sliderP" layoutX="870.0" layoutY="100.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" showTickLabels="true" value="0.5" />
@@ -31,7 +31,7 @@
          </font>
       </Button>
       <Label layoutX="846.0" layoutY="206.0" text="n" />
-      <Slider fx:id="sliderN" blockIncrement="100.0" layoutX="870.0" layoutY="206.0" majorTickUnit="1.0" max="8.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="4.0" />
+      <Slider fx:id="sliderN" blockIncrement="100.0" layoutX="870.0" layoutY="206.0" majorTickUnit="1.0" max="8.0" min="4.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="4.0" />
       <Slider fx:id="sliderSpeed" blockIncrement="100.0" layoutX="869.0" layoutY="169.0" majorTickUnit="110.0" max="1000.0" min="10.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="100.0" />
       <Label layoutX="833.0" layoutY="169.0" text="speed" />
       <Label layoutX="847.0" layoutY="132.0" text="k" />
