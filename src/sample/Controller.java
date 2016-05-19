@@ -2,13 +2,10 @@ package sample;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
@@ -49,7 +46,7 @@ public class Controller implements Initializable {
         });
 
         antDraw.pane = pane;
-        antDraw.generateLineValues((int) sliderN.getValue());
+        antDraw.initialize((int) sliderN.getValue(), sliderSpeed);
         antDraw.generateLineValuesLabels();
         antDraw.generateVertexes();
         antDraw.generateEdges();
@@ -60,18 +57,31 @@ public class Controller implements Initializable {
         //проверка ввода
 
         if (!antThread.isAlive()) {
-            sliderAlpha.setDisable(true);
-            sliderBetta.setDisable(true);
-            sliderK.setDisable(true);
-            sliderN.setDisable(true);
-            sliderP.setDisable(true);
-            antDraw.startLineValues();
-            mainButton.setText("Stop");
+            if(antDraw.lineValuesCheck()) {
+                sliderAlpha.setDisable(true);
+                sliderBetta.setDisable(true);
+                sliderK.setDisable(true);
+                sliderN.setDisable(true);
+                sliderP.setDisable(true);
+                antDraw.startLineValues();
+                antDraw.mirrorLineValues();
+                mainButton.setText("Stop");
 
-            antDraw.setConstants(sliderAlpha.getValue(), sliderBetta.getValue(), sliderP.getValue(),
-                    (int) sliderK.getValue(), (int) sliderSpeed.getValue());
-            antThread = new antDraw();
-            antThread.start();
+                antDraw.setConstants(sliderAlpha.getValue(), sliderBetta.getValue(), sliderP.getValue(),
+                        (int) sliderK.getValue(), (int) sliderSpeed.getValue());
+                antThread = new antDraw();
+                antThread.start();
+            }
+            else {
+                mainButton.setText("wrong input!");
+                try{
+                    Thread.sleep(5000);
+                }
+                catch (InterruptedException exc){
+                    System.out.println("ops");
+                }
+                mainButton.setText("Start");
+            }
         } else {
             sliderAlpha.setDisable(false);
             sliderBetta.setDisable(false);

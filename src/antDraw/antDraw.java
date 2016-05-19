@@ -22,6 +22,7 @@ public class antDraw extends Thread{
     public static Label[] cityLabels;
     public static Circle[] vertexes;
     public static Line[][] edges;
+    public static Slider speedSlider;
     public static double[][] pheros;
     public static boolean isFinished = false;
     public static final int CITY_MAX = 8;
@@ -40,7 +41,8 @@ public class antDraw extends Thread{
     public static int cityCt;
     public static Circle shape;
 
-    public static void generateLineValues(int cityCt){
+    public static void initialize(int cityCt, Slider speedSlider){
+        antDraw.speedSlider = speedSlider;
         antDraw.cityCt = cityCt;
         cityX = CITY_MAX - cityCt;
         lineValues = new TextField[CITY_MAX][CITY_MAX];
@@ -185,11 +187,10 @@ public class antDraw extends Thread{
     public static void edgesUpdate(){
         for(int i = 1; i < edges.length ; i++)
             for(int j = 0; j < edges[i].length; j++)
-                edges[i][j].setOpacity(pheroToCapacity(pheros[i][j]));
+                edges[i][j].setOpacity(pheroToOpacity(pheros[i][j]));
     }
 
-    //change
-    public static double pheroToCapacity(double phero){
+    public static double pheroToOpacity(double phero){
         if(phero > 1)
             phero = 1;
         else
@@ -198,8 +199,25 @@ public class antDraw extends Thread{
         return phero;
     }
 
-    //change
+    public static void mirrorLineValues(){
+        for(int i = 1; i < cityCt; i++)
+            for(int j = 0; j < i; j++)
+                lineValues[j][i + cityX].setText(lineValues[i][j + cityX].getText());
+    }
+
     public static boolean lineValuesCheck(){
+        int value;
+        for(int i = 1; i < cityCt; i++) {
+            for (int j = 0; j < i; j++) {
+                try {
+                    value = Integer.parseInt(lineValues[i][j + cityX].getText());
+                    if (value < 1 || value > 999)
+                        return false;
+                } catch (NumberFormatException exc){
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -232,7 +250,7 @@ public class antDraw extends Thread{
             do {
                 ant.round();
                 try {
-                    Thread.sleep(1000 - antDraw.speed);
+                    Thread.sleep(1001 - (int)speedSlider.getValue());
                 } catch (InterruptedException e) {
                     System.out.println("ops!");
                 }

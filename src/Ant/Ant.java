@@ -105,7 +105,6 @@ public class Ant {
 
     private void move(){
         lenLeft--;
-            if(lenLeft % 10 == 0)
         if(lenLeft == 0) {
             inCity = true;
             shape.setCenterX(cityXCoords[currentCity]);
