@@ -98,6 +98,7 @@ public class Controller implements Initializable {
             antDraw.stopLineValues();
             mainButton.setText("Start");
 
+            antThread.stop();
             antDraw.isFinished = true;
             pane.getChildren().remove(antDraw.shape);
         }
@@ -106,5 +107,10 @@ public class Controller implements Initializable {
     @FXML
     public void demoGenerate(){
         antDraw.generateDemoLineValues();
+    }
+
+    @Override
+    protected void finalize(){
+        antThread.stop();
     }
 }
