@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
@@ -29,6 +31,8 @@ public class Controller implements Initializable {
     @FXML
     Slider sliderK;
     @FXML
+    ImageView formulaImg;
+    @FXML
     Pane pane;
 
     private antDraw antThread = new antDraw();
@@ -38,12 +42,15 @@ public class Controller implements Initializable {
         sliderN.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
                 antDraw.changeLineValuesTable((int) sliderN.getValue());
                 antDraw.generateLineValuesLabels();
                 antDraw.generateVertexes();
                 antDraw.generateEdges();
             }
         });
+
+        formulaImg.setImage(new Image(Main.class.getResourceAsStream("/images/formula.gif")));
 
         antDraw.pane = pane;
         antDraw.initialize((int) sliderN.getValue(), sliderSpeed);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.paint.*?>
@@ -20,21 +21,37 @@
    </cursor>
    <children>
       <Slider fx:id="sliderAlpha" blockIncrement="0.5" layoutX="870.0" layoutY="14.0" majorTickUnit="0.5" max="4.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="1.0" />
-      <Label layoutX="832.0" layoutY="14.0" text="alpha" />
+      <Label layoutX="832.0" layoutY="14.0" text="alpha">
+         <tooltip>
+            <Tooltip autoHide="true" text="значимость уровня феромонов" />
+         </tooltip></Label>
       <Slider fx:id="sliderBetta" layoutX="870.0" layoutY="61.0" majorTickUnit="0.5" max="4.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="1.0" />
-      <Label layoutX="832.0" layoutY="61.0" text="betta" />
-      <Label layoutX="849.0" layoutY="98.0" text="p" />
-      <Slider fx:id="sliderP" layoutX="870.0" layoutY="100.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" showTickLabels="true" value="0.5" />
+      <Label layoutX="832.0" layoutY="61.0" text="betta">
+         <tooltip>
+            <Tooltip autoHide="true" text="значимость расстояний между городами" />
+         </tooltip></Label>
+      <Label layoutX="849.0" layoutY="98.0" text="p">
+         <tooltip>
+            <Tooltip text="уровень затухания феромонов" />
+         </tooltip></Label>
+      <Slider fx:id="sliderP" layoutX="870.0" layoutY="100.0" majorTickUnit="0.25" max="1.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="0.25" />
       <Button fx:id="mainButton" layoutX="836.0" layoutY="492.0" mnemonicParsing="false" onAction="#startButton" prefHeight="94.0" prefWidth="170.0" text="Start">
          <font>
             <Font size="37.0" />
          </font>
       </Button>
-      <Label layoutX="846.0" layoutY="206.0" text="n" />
+      <Label layoutX="846.0" layoutY="206.0" text="n">
+         <tooltip>
+            <Tooltip text="количество городов" />
+         </tooltip></Label>
       <Slider fx:id="sliderN" blockIncrement="100.0" layoutX="870.0" layoutY="206.0" majorTickUnit="1.0" max="8.0" min="4.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" value="4.0" />
-      <Slider fx:id="sliderSpeed" blockIncrement="100.0" layoutX="869.0" layoutY="169.0" majorTickUnit="110.0" max="1000.0" min="10.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="100.0" />
+      <Slider fx:id="sliderSpeed" blockIncrement="100.0" layoutX="869.0" layoutY="169.0" majorTickUnit="100.0" max="1000.0" min="1.0" minorTickCount="4" showTickLabels="true" showTickMarks="true" value="800.0" />
       <Label layoutX="833.0" layoutY="169.0" text="speed" />
-      <Label layoutX="847.0" layoutY="132.0" text="k" />
-      <Slider fx:id="sliderK" blockIncrement="100.0" layoutX="869.0" layoutY="132.0" majorTickUnit="79.0" max="800.0" min="10.0" showTickLabels="true" showTickMarks="true" value="50.0" />
+      <Label layoutX="847.0" layoutY="132.0" text="k">
+         <tooltip>
+            <Tooltip text="коэффициент обновления феромонов" />
+         </tooltip></Label>
+      <Slider fx:id="sliderK" blockIncrement="100.0" layoutX="869.0" layoutY="132.0" majorTickUnit="50.0" max="1000.0" min="10.0" showTickLabels="true" showTickMarks="true" value="50.0" />
+      <ImageView fx:id="formulaImg" fitHeight="150.0" fitWidth="200.0" layoutX="598.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true" />
        </children>
 </Pane>
