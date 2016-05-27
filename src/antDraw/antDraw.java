@@ -40,6 +40,7 @@ public class antDraw extends Thread{
     private static int cityX;
     public static int cityCt;
     public static Circle shape;
+    public static Label roadLen;
 
     public static void initialize(int cityCt, Slider speedSlider){
         antDraw.speedSlider = speedSlider;
@@ -60,6 +61,10 @@ public class antDraw extends Thread{
     }
 
     public static void changeLineValuesTable(int cityCt){
+        for(int i = 0; i < CITY_MAX; i++)
+            for(int j = 0; j < CITY_MAX; j++)
+                lineValues[i][j].setText("");
+
         antDraw.cityCt = cityCt;
         cityX = CITY_MAX - cityCt;
         for(int i = 0; i < cityCt; i++)
@@ -205,6 +210,12 @@ public class antDraw extends Thread{
                 lineValues[j][i + cityX].setText(lineValues[i][j + cityX].getText());
     }
 
+    public static void generateDemoLineValues(){
+        for(int i = 1; i < cityCt; i++)
+            for(int j = 0; j < i; j++)
+                lineValues[i][j + cityX].setText(Integer.toString((int)((Math.random() * 998) + 1)));
+    }
+
     public static boolean lineValuesCheck(){
         int value;
         for(int i = 1; i < cityCt; i++) {
@@ -245,16 +256,17 @@ public class antDraw extends Thread{
             edgesUpdate();
             antDraw.isFinished = false;
             Ant ant = new Ant(antDraw.pane, pheros, lineValues, cityCt, alpha,
-                    betta, p, k, cityXCoords, cityYCoords, shape);
+                    betta, p, k, speedSlider, cityXCoords, cityYCoords, shape);
 
             do {
                 ant.round();
-                try {
-                    Thread.sleep(1001 - (int)speedSlider.getValue());
-                } catch (InterruptedException e) {
-                    System.out.println("ops!");
-                }
             } while (!ant.isFinished && !antDraw.isFinished);
+            try{
+                Thread.sleep(100);
+            }
+            catch (InterruptedException exc){
+                System.out.println("lol");
+            }
         }while(!antDraw.isFinished);
 
     }

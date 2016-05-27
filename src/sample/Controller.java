@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -33,6 +34,8 @@ public class Controller implements Initializable {
     @FXML
     ImageView formulaImg;
     @FXML
+    Button demoButton;
+    @FXML
     Pane pane;
 
     private antDraw antThread = new antDraw();
@@ -42,6 +45,8 @@ public class Controller implements Initializable {
         sliderN.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                mainButton.setText("Start");
 
                 antDraw.changeLineValuesTable((int) sliderN.getValue());
                 antDraw.generateLineValuesLabels();
@@ -65,6 +70,7 @@ public class Controller implements Initializable {
 
         if (!antThread.isAlive()) {
             if(antDraw.lineValuesCheck()) {
+                demoButton.setDisable(true);
                 sliderAlpha.setDisable(true);
                 sliderBetta.setDisable(true);
                 sliderK.setDisable(true);
@@ -80,16 +86,10 @@ public class Controller implements Initializable {
                 antThread.start();
             }
             else {
-                mainButton.setText("wrong input!");
-                try{
-                    Thread.sleep(5000);
-                }
-                catch (InterruptedException exc){
-                    System.out.println("ops");
-                }
-                mainButton.setText("Start");
+                mainButton.setText("Error");
             }
         } else {
+            demoButton.setDisable(false);
             sliderAlpha.setDisable(false);
             sliderBetta.setDisable(false);
             sliderK.setDisable(false);
@@ -101,5 +101,10 @@ public class Controller implements Initializable {
             antDraw.isFinished = true;
             pane.getChildren().remove(antDraw.shape);
         }
+    }
+
+    @FXML
+    public void demoGenerate(){
+        antDraw.generateDemoLineValues();
     }
 }

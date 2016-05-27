@@ -1,5 +1,7 @@
 package Ant;
 
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -29,9 +31,11 @@ public class Ant {
     private boolean inCity;
     private int currentCity;
     private int prevCity;
+    private Slider speedSlider;
+    private final int FPS = 70;
 
     public Ant(Pane pane, double[][] pheros, int[][] lineValues, int cityCt, double alpha,
-               double betta,double p, int k, int[] cityXCoords, int[] cityYCoords, Circle shape){
+               double betta,double p, int k, Slider speedSlider, int[] cityXCoords, int[] cityYCoords, Circle shape){
         this.pane = pane;
         this.lineValues = lineValues;
         this.cityCt = cityCt;
@@ -51,6 +55,7 @@ public class Ant {
         this.inCity = true;
         this.currentCity = 0;
         this.shape = shape;
+        this.speedSlider = speedSlider;
     }
 
     private double procDenominator(){
@@ -103,6 +108,7 @@ public class Ant {
         inCity = false;
     }
 
+    /*
     private void move(){
         lenLeft--;
         if(lenLeft == 0) {
@@ -116,6 +122,34 @@ public class Ant {
             shape.setCenterY(cityYCoords[prevCity] + (lenTotal - lenLeft) / (double)lenTotal *
                     (cityYCoords[currentCity] - cityYCoords[prevCity]));
         }
+    }*/
+
+    private void move(){
+        shape.setCenterX(cityXCoords[prevCity]);
+        shape.setCenterY(cityYCoords[prevCity]);
+
+        double deltaX, deltaY, moveTime;
+        int stepCt;
+
+        moveTime = lineValues[currentCity][prevCity] / speedSlider.getValue();
+        stepCt = (int)(moveTime * FPS);
+        deltaX = (cityXCoords[currentCity] - cityXCoords[prevCity]) / (double)stepCt;
+        deltaY = (cityYCoords[currentCity] - cityYCoords[prevCity]) / (double)stepCt;
+
+        for(int i = 0; i < stepCt; i++){
+            shape.setCenterX(shape.getCenterX() + deltaX);
+            shape.setCenterY(shape.getCenterY() + deltaY);
+            try {
+                Thread.sleep(1000 / FPS);
+            }
+            catch (InterruptedException exc){
+                System.out.println("lol");
+            }
+        }
+
+        inCity = true;
+        shape.setCenterX(cityXCoords[currentCity]);
+        shape.setCenterY(cityYCoords[currentCity]);
     }
 
     private void pherosUpdate(){
@@ -132,6 +166,7 @@ public class Ant {
             pheros[city1][city2] = pheros[city2][city1] += k / (double)allDistance;
         }
     }
+
 
     public void round() {
         if (inCity)
